@@ -1,0 +1,24 @@
+---
+export interface Props {
+  title: string;
+  description: string;
+  url: string;
+  icon?: string;
+}
+const { title, description, url, icon = '🧮' } = Astro.props;
+---
+<a href={url} class="tool-card">
+  <div class="tool-icon">{icon}</div>
+  <h3>{title}</h3>
+  <p>{description}</p>
+  <span class="tool-link">Calcular →</span>
+</a>
+
+<style>
+  .tool-card { display: block; background: white; border-radius: 1rem; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: transform 0.2s, box-shadow 0.2s; text-decoration: none; color: #1f2937; }
+  .tool-card:hover { transform: translateY(-4px); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); }
+  .tool-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+  .tool-card h3 { font-size: 1.25rem; margin: 0 0 0.5rem; }
+  .tool-card p { font-size: 0.875rem; color: #6b7280; margin-bottom: 1rem; }
+  .tool-link { font-weight: 600; color: #2563eb; }
+</style>

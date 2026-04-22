@@ -1,0 +1,34 @@
+---
+// Navegación principal
+const currentPath = Astro.url.pathname;
+const isHome = currentPath === '/';
+---
+
+<header class="site-header">
+  <div class="container">
+    <div class="logo">
+      <a href="/" aria-label="CalculaFácil - Inicio">
+        <span class="logo-icon">🧮</span>
+        <span class="logo-text">CalculaFácil</span>
+      </a>
+    </div>
+    <nav class="main-nav">
+      <ul>
+        <li><a href="/finanzas/" class={currentPath.startsWith('/finanzas') ? 'active' : ''}>Finanzas</a></li>
+        <li><a href="/fecha-hora/" class={currentPath.startsWith('/fecha-hora') ? 'active' : ''}>Fecha y hora</a></li>
+        <li><a href="/utilidades/" class={currentPath.startsWith('/utilidades') ? 'active' : ''}>Utilidades</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header { background: #1e3a8a; color: white; padding: 1rem 0; position: sticky; top: 0; z-index: 100; }
+  .container { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+  .logo a { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: white; font-weight: bold; font-size: 1.5rem; }
+  .logo-icon { font-size: 1.8rem; }
+  .main-nav ul { display: flex; gap: 1.5rem; list-style: none; margin: 0; padding: 0; }
+  .main-nav a { color: white; text-decoration: none; font-weight: 500; padding: 0.25rem 0; border-bottom: 2px solid transparent; }
+  .main-nav a:hover, .main-nav a.active { border-bottom-color: #fbbf24; }
+  @media (max-width: 640px) { .main-nav ul { gap: 1rem; } .logo-text { display: none; } .logo-icon { font-size: 2rem; } }
+</style>
