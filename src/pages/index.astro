@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SearchBar from '../components/SearchBar.astro';
+import ToolCard from '../components/ToolCard.astro';
+import CategoryCard from '../components/CategoryCard.astro';
+import AdSlot from '../components/AdSlot.astro';
+import { getAllTools } from '../data/tools';
+import { categories } from '../data/categories';
+
+const popularTools = getAllTools().slice(0, 6);
+---
+
+<BaseLayout title="CalculaFácil" description="Calculadoras y conversores online gratis. Porcentajes, finanzas, fechas, horas y más herramientas rápidas y precisas.">
+  <section class="hero">
+    <h1>CalculaFácil</h1>
+    <p>Herramientas online rápidas, precisas y sin complicaciones</p>
+    <SearchBar />
+  </section>
+
+  <AdSlot format="banner" />
+
+  <section class="popular-tools">
+    <h2>Herramientas más populares</h2>
+    <div class="tools-grid">
+      {popularTools.map(tool => <ToolCard {...tool} />)}
+    </div>
+  </section>
+
+  <section class="categories">
+    <h2>Categorías</h2>
+    <div class="categories-grid">
+      {categories.map(cat => <CategoryCard name={cat.name} slug={cat.slug} description={cat.description} />)}
+    </div>
+  </section>
+
+  <AdSlot format="horizontal" />
+</BaseLayout>
+
+<style>
+  .hero { text-align: center; padding: 2rem 1rem; }
+  .hero h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+  .tools-grid, .categories-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+</style>
