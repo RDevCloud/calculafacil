@@ -28,7 +28,7 @@ const faqs = [
     <p>Si quieres calcular el 20% de 150 €, el resultado es 30 €.</p>
   </div>
   <div slot="form">
-    <ToolFormShell toolName={toolName} scriptPath="porcentaje">
+    <ToolFormShell toolName={toolName}>
       <div slot="inputs">
         <label>Valor base:</label>
         <input type="number" id="valor" step="any" placeholder="Ej: 150" required />
@@ -42,3 +42,17 @@ const faqs = [
     <p>Simplemente ingresa la cantidad total y el porcentaje que deseas calcular. Obtendrás el resultado al instante.</p>
   </div>
 </ToolLayout>
+
+<script>
+  const form = document.getElementById('tool-form') as HTMLFormElement;
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const valor = parseFloat((document.getElementById('valor') as HTMLInputElement).value || '0');
+      const pct   = parseFloat((document.getElementById('porcentaje') as HTMLInputElement).value || '0');
+      const resultado = (valor * pct) / 100;
+      const resultDiv = document.getElementById('result');
+      if (resultDiv) resultDiv.innerHTML = `<strong>${pct}% de ${valor} = ${resultado.toFixed(2)}</strong>`;
+    });
+  }
+</script>

@@ -1,0 +1,64 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+import ToolFormShell from '../../components/ToolFormShell.astro';
+import { generateTitle, generateDescription } from '../../utils/seo';
+
+const toolName = 'Días entre fechas';
+const slug = 'dias-entre-fechas';
+const category = 'fecha-hora';
+const title = generateTitle(toolName);
+const description = generateDescription(toolName, 'diferencia en días, semanas y meses entre dos fechas');
+const canonical = `https://calculafacil.netlify.app/fecha-hora/${slug}/`;
+const breadcrumbItems = [
+  { name: 'Fecha y hora', url: '/fecha-hora/' },
+  { name: toolName }
+];
+const faqs = [
+  { question: '¿Cómo calculo los días entre dos fechas?', answer: 'Resta la fecha inicial de la fecha final. El resultado son los días de diferencia.' },
+  { question: '¿Para qué sirve esta calculadora?', answer: 'Es útil para calcular plazos, vencimientos, días hasta un evento o la duración de un período.' },
+];
+---
+
+<ToolLayout title={title} description={description} canonical={canonical} breadcrumbItems={breadcrumbItems} toolName={toolName} toolSlug={slug} category={category} faqs={faqs}>
+  <div slot="intro">
+    <p>Calcula exactamente cuántos días, semanas o meses hay entre dos fechas.</p>
+  </div>
+  <div slot="form">
+    <ToolFormShell toolName={toolName}>
+      <div slot="inputs">
+        <label>Fecha inicial:</label>
+        <input type="date" id="fecha1" required />
+        <label>Fecha final:</label>
+        <input type="date" id="fecha2" required />
+      </div>
+    </ToolFormShell>
+  </div>
+  <div slot="explanation">
+    <h2>¿Cómo funciona?</h2>
+    <p>Calcula la diferencia exacta entre dos fechas en días, semanas y meses aproximados.</p>
+  </div>
+</ToolLayout>
+
+<script>
+  const form = document.getElementById('tool-form') as HTMLFormElement;
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const d1 = new Date((document.getElementById('fecha1') as HTMLInputElement).value);
+      const d2 = new Date((document.getElementById('fecha2') as HTMLInputElement).value);
+      const diffMs = d2.getTime() - d1.getTime();
+      const dias   = Math.round(diffMs / (1000 * 60 * 60 * 24));
+      const semanas = (dias / 7).toFixed(1);
+      const meses  = (dias / 30.44).toFixed(1);
+      const resultDiv = document.getElementById('result');
+      if (!resultDiv) return;
+      if (isNaN(dias)) {
+        resultDiv.innerHTML = `<strong>Por favor ingresa ambas fechas.</strong>`;
+      } else if (dias < 0) {
+        resultDiv.innerHTML = `<strong>La fecha final debe ser posterior a la inicial.</strong>`;
+      } else {
+        resultDiv.innerHTML = `<strong>${Math.abs(dias)} días &nbsp;|&nbsp; ${semanas} semanas &nbsp;|&nbsp; ${meses} meses</strong>`;
+      }
+    });
+  }
+</script>

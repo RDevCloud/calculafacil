@@ -1,0 +1,14 @@
+---
+import CategoryLayout from '../../layouts/CategoryLayout.astro';
+import { getToolsByCategory } from '../../data/tools';
+
+const tools = getToolsByCategory('utilidades');
+---
+
+<CategoryLayout
+  title="Herramientas de utilidad"
+  description="Herramientas prácticas: contador de palabras, caracteres y oraciones. Útiles para escritores, estudiantes y profesionales."
+  categoryName="Utilidades"
+  tools={tools}
+  breadcrumbItems={[{ name: 'Utilidades' }]}
+/>

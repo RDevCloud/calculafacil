@@ -1,0 +1,14 @@
+---
+import CategoryLayout from '../../layouts/CategoryLayout.astro';
+import { getToolsByCategory } from '../../data/tools';
+
+const tools = getToolsByCategory('fecha-hora');
+---
+
+<CategoryLayout
+  title="Calculadoras de fecha y hora"
+  description="Calcula días entre fechas, tu edad exacta, y convierte zonas horarias como CST a PST o UTC a hora local."
+  categoryName="Fecha y hora"
+  tools={tools}
+  breadcrumbItems={[{ name: 'Fecha y hora' }]}
+/>

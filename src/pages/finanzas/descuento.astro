@@ -1,0 +1,57 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+import ToolFormShell from '../../components/ToolFormShell.astro';
+import { generateTitle, generateDescription } from '../../utils/seo';
+
+const toolName = 'Calculadora de descuento';
+const slug = 'descuento';
+const category = 'finanzas';
+const title = generateTitle(toolName);
+const description = generateDescription(toolName, 'precio final tras aplicar un descuento');
+const canonical = `https://calculafacil.netlify.app/finanzas/${slug}/`;
+const breadcrumbItems = [
+  { name: 'Finanzas', url: '/finanzas/' },
+  { name: toolName }
+];
+const faqs = [
+  { question: '¿Cómo se calcula el precio con descuento?', answer: 'Multiplica el precio original por (1 - descuento/100). Por ejemplo, 200 con 15% de descuento = 200 × 0.85 = 170.' },
+  { question: '¿Cuánto ahorro con el descuento?', answer: 'El ahorro es el precio original menos el precio final. También puedes calcularlo como precio × (descuento/100).' },
+];
+---
+
+<ToolLayout title={title} description={description} canonical={canonical} breadcrumbItems={breadcrumbItems} toolName={toolName} toolSlug={slug} category={category} faqs={faqs}>
+  <div slot="intro">
+    <p>Ingresa el precio original y el porcentaje de descuento para obtener el precio final y el ahorro exacto.</p>
+    <h2>Ejemplo</h2>
+    <p>Un artículo de 200 € con 25% de descuento cuesta 150 € — ahorras 50 €.</p>
+  </div>
+  <div slot="form">
+    <ToolFormShell toolName={toolName}>
+      <div slot="inputs">
+        <label>Precio original:</label>
+        <input type="number" id="precio" step="any" placeholder="Ej: 200" required />
+        <label>Descuento (%):</label>
+        <input type="number" id="descuento" step="any" placeholder="Ej: 25" required />
+      </div>
+    </ToolFormShell>
+  </div>
+  <div slot="explanation">
+    <h2>¿Cómo funciona?</h2>
+    <p>La fórmula es: <strong>Precio final = Precio original × (1 - Descuento / 100)</strong>. El ahorro es la diferencia entre el precio original y el final.</p>
+  </div>
+</ToolLayout>
+
+<script>
+  const form = document.getElementById('tool-form') as HTMLFormElement;
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const precio    = parseFloat((document.getElementById('precio') as HTMLInputElement).value || '0');
+      const descuento = parseFloat((document.getElementById('descuento') as HTMLInputElement).value || '0');
+      const final  = precio * (1 - descuento / 100);
+      const ahorro = precio - final;
+      const resultDiv = document.getElementById('result');
+      if (resultDiv) resultDiv.innerHTML = `<strong>Precio final: ${final.toFixed(2)} &nbsp;|&nbsp; Ahorro: ${ahorro.toFixed(2)}</strong>`;
+    });
+  }
+</script>

@@ -1,0 +1,68 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+import ToolFormShell from '../../components/ToolFormShell.astro';
+import { generateTitle, generateDescription } from '../../utils/seo';
+
+const toolName = 'Interés compuesto';
+const slug = 'interes-compuesto';
+const category = 'finanzas';
+const title = generateTitle(toolName);
+const description = generateDescription(toolName, 'proyectar el crecimiento de una inversión con interés compuesto');
+const canonical = `https://calculafacil.netlify.app/finanzas/${slug}/`;
+const breadcrumbItems = [
+  { name: 'Finanzas', url: '/finanzas/' },
+  { name: toolName }
+];
+const faqs = [
+  { question: '¿Qué es el interés compuesto?', answer: 'Es el interés que se calcula sobre el capital inicial más los intereses acumulados de períodos anteriores.' },
+  { question: '¿Cuál es la fórmula del interés compuesto?', answer: 'A = P × (1 + r/n)^(n×t), donde P=capital, r=tasa anual, n=veces que se capitaliza al año, t=años.' },
+];
+---
+
+<ToolLayout title={title} description={description} canonical={canonical} breadcrumbItems={breadcrumbItems} toolName={toolName} toolSlug={slug} category={category} faqs={faqs}>
+  <div slot="intro">
+    <p>Calcula cuánto crecerá tu inversión con interés compuesto. Introduce el capital, tasa anual y plazo.</p>
+    <h2>Ejemplo</h2>
+    <p>1,000 € al 5% anual durante 10 años = 1,628.89 €</p>
+  </div>
+  <div slot="form">
+    <ToolFormShell toolName={toolName}>
+      <div slot="inputs">
+        <label>Capital inicial (€):</label>
+        <input type="number" id="capital" step="any" placeholder="Ej: 1000" required />
+        <label>Tasa de interés anual (%):</label>
+        <input type="number" id="tasa" step="any" placeholder="Ej: 5" required />
+        <label>Años:</label>
+        <input type="number" id="anos" step="1" placeholder="Ej: 10" required />
+        <label>Capitalización:</label>
+        <select id="n">
+          <option value="12">Mensual (12x/año)</option>
+          <option value="4">Trimestral (4x/año)</option>
+          <option value="2">Semestral (2x/año)</option>
+          <option value="1">Anual (1x/año)</option>
+        </select>
+      </div>
+    </ToolFormShell>
+  </div>
+  <div slot="explanation">
+    <h2>¿Cómo funciona?</h2>
+    <p>Fórmula: <strong>A = P × (1 + r/n)^(n×t)</strong>. El poder del interés compuesto radica en que los intereses generan más intereses con el tiempo.</p>
+  </div>
+</ToolLayout>
+
+<script>
+  const form = document.getElementById('tool-form') as HTMLFormElement;
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const P = parseFloat((document.getElementById('capital') as HTMLInputElement).value || '0');
+      const r = parseFloat((document.getElementById('tasa') as HTMLInputElement).value || '0') / 100;
+      const t = parseFloat((document.getElementById('anos') as HTMLInputElement).value || '0');
+      const n = parseFloat((document.getElementById('n') as HTMLSelectElement).value);
+      const A = P * Math.pow(1 + r / n, n * t);
+      const ganancia = A - P;
+      const resultDiv = document.getElementById('result');
+      if (resultDiv) resultDiv.innerHTML = `<strong>Monto final: ${A.toFixed(2)} &nbsp;|&nbsp; Ganancia: ${ganancia.toFixed(2)}</strong>`;
+    });
+  }
+</script>

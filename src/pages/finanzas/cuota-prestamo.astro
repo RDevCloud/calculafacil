@@ -1,0 +1,62 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+import ToolFormShell from '../../components/ToolFormShell.astro';
+import { generateTitle, generateDescription } from '../../utils/seo';
+
+const toolName = 'Cuota de préstamo';
+const slug = 'cuota-prestamo';
+const category = 'finanzas';
+const title = generateTitle(toolName);
+const description = generateDescription(toolName, 'cuota mensual de un préstamo o hipoteca');
+const canonical = `https://calculafacil.netlify.app/finanzas/${slug}/`;
+const breadcrumbItems = [
+  { name: 'Finanzas', url: '/finanzas/' },
+  { name: toolName }
+];
+const faqs = [
+  { question: '¿Qué es la cuota mensual?', answer: 'Es el pago fijo mensual que incluye una parte del capital prestado más los intereses correspondientes.' },
+  { question: '¿Qué es el sistema de amortización francés?', answer: 'Es el sistema más común: cuotas iguales donde al inicio pagas más intereses y al final más capital.' },
+];
+---
+
+<ToolLayout title={title} description={description} canonical={canonical} breadcrumbItems={breadcrumbItems} toolName={toolName} toolSlug={slug} category={category} faqs={faqs}>
+  <div slot="intro">
+    <p>Calcula la cuota mensual de cualquier préstamo o hipoteca. Introduce el monto, tasa y plazo.</p>
+    <h2>Ejemplo</h2>
+    <p>Un préstamo de 10,000 € al 6% anual a 3 años tiene una cuota mensual de 304.22 €.</p>
+  </div>
+  <div slot="form">
+    <ToolFormShell toolName={toolName}>
+      <div slot="inputs">
+        <label>Monto del préstamo (€):</label>
+        <input type="number" id="monto" step="any" placeholder="Ej: 10000" required />
+        <label>Tasa de interés anual (%):</label>
+        <input type="number" id="tasa" step="any" placeholder="Ej: 6" required />
+        <label>Plazo (meses):</label>
+        <input type="number" id="meses" step="1" placeholder="Ej: 36" required />
+      </div>
+    </ToolFormShell>
+  </div>
+  <div slot="explanation">
+    <h2>¿Cómo se calcula?</h2>
+    <p>Fórmula: <strong>C = P × [r(1+r)^n] / [(1+r)^n - 1]</strong>, donde P=préstamo, r=tasa mensual, n=número de meses.</p>
+  </div>
+</ToolLayout>
+
+<script>
+  const form = document.getElementById('tool-form') as HTMLFormElement;
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const P = parseFloat((document.getElementById('monto') as HTMLInputElement).value || '0');
+      const tasaAnual = parseFloat((document.getElementById('tasa') as HTMLInputElement).value || '0');
+      const n = parseFloat((document.getElementById('meses') as HTMLInputElement).value || '0');
+      const r = tasaAnual / 100 / 12;
+      const cuota = r === 0 ? P / n : P * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+      const total = cuota * n;
+      const intereses = total - P;
+      const resultDiv = document.getElementById('result');
+      if (resultDiv) resultDiv.innerHTML = `<strong>Cuota mensual: ${cuota.toFixed(2)} &nbsp;|&nbsp; Total intereses: ${intereses.toFixed(2)}</strong>`;
+    });
+  }
+</script>

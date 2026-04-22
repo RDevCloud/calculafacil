@@ -1,0 +1,71 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+import ToolFormShell from '../../components/ToolFormShell.astro';
+import { generateTitle, generateDescription } from '../../utils/seo';
+
+const toolName = 'Edad exacta';
+const slug = 'edad-exacta';
+const category = 'fecha-hora';
+const title = generateTitle(toolName);
+const description = generateDescription(toolName, 'tu edad exacta en años, meses y días');
+const canonical = `https://calculafacil.netlify.app/fecha-hora/${slug}/`;
+const breadcrumbItems = [
+  { name: 'Fecha y hora', url: '/fecha-hora/' },
+  { name: toolName }
+];
+const faqs = [
+  { question: '¿Cómo calculo mi edad exacta?', answer: 'Ingresa tu fecha de nacimiento y la calculadora determinará tus años, meses y días exactos hasta hoy.' },
+  { question: '¿Cuándo cumplo el próximo año?', answer: 'La calculadora también muestra los días que faltan para tu próximo cumpleaños.' },
+];
+---
+
+<ToolLayout title={title} description={description} canonical={canonical} breadcrumbItems={breadcrumbItems} toolName={toolName} toolSlug={slug} category={category} faqs={faqs}>
+  <div slot="intro">
+    <p>Calcula tu edad exacta en años, meses y días a partir de tu fecha de nacimiento.</p>
+  </div>
+  <div slot="form">
+    <ToolFormShell toolName={toolName}>
+      <div slot="inputs">
+        <label>Fecha de nacimiento:</label>
+        <input type="date" id="nacimiento" required />
+      </div>
+    </ToolFormShell>
+  </div>
+  <div slot="explanation">
+    <h2>¿Cómo funciona?</h2>
+    <p>Compara tu fecha de nacimiento con la fecha actual para calcular tu edad exacta incluyendo años, meses y días.</p>
+  </div>
+</ToolLayout>
+
+<script>
+  const form = document.getElementById('tool-form') as HTMLFormElement;
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const nac = new Date((document.getElementById('nacimiento') as HTMLInputElement).value);
+      const hoy = new Date();
+      const resultDiv = document.getElementById('result');
+      if (!resultDiv || isNaN(nac.getTime())) return;
+
+      let anos  = hoy.getFullYear() - nac.getFullYear();
+      let meses = hoy.getMonth() - nac.getMonth();
+      let dias  = hoy.getDate() - nac.getDate();
+
+      if (dias < 0) {
+        meses--;
+        dias += new Date(hoy.getFullYear(), hoy.getMonth(), 0).getDate();
+      }
+      if (meses < 0) {
+        anos--;
+        meses += 12;
+      }
+
+      // Días para próximo cumpleaños
+      const cumple = new Date(hoy.getFullYear(), nac.getMonth(), nac.getDate());
+      if (cumple < hoy) cumple.setFullYear(hoy.getFullYear() + 1);
+      const diasCumple = Math.round((cumple.getTime() - hoy.getTime()) / (1000 * 60 * 60 * 24));
+
+      resultDiv.innerHTML = `<strong>${anos} años, ${meses} meses y ${dias} días</strong><br><small>Próximo cumpleaños en ${diasCumple} día(s) 🎂</small>`;
+    });
+  }
+</script>

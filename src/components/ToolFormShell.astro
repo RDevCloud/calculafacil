@@ -1,6 +1,5 @@
 ---
-// Envuelve el formulario interactivo de cada herramienta
-const { toolName, scriptPath } = Astro.props;
+const { toolName } = Astro.props;
 ---
 <div class="tool-form-container" data-tool={toolName}>
   <form id="tool-form" class="tool-form">
@@ -10,16 +9,12 @@ const { toolName, scriptPath } = Astro.props;
   <div id="result" class="result-area"></div>
 </div>
 
-<script>
-  // Carga dinámica del script específico de la herramienta
-  import(`../scripts/tools/${scriptPath}.ts`).then(module => {
-    module.default();
-  });
-</script>
-
 <style>
   .tool-form { background: #f9fafb; padding: 1.5rem; border-radius: 1rem; margin: 1.5rem 0; }
-  .tool-form input, .tool-form select { width: 100%; padding: 0.5rem; margin: 0.5rem 0 1rem; border: 1px solid #ccc; border-radius: 0.5rem; }
-  .tool-form button { background: #1e3a8a; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: bold; }
-  .result-area { font-size: 1.25rem; padding: 1rem; background: #eef2ff; border-radius: 0.75rem; }
+  .tool-form label { display: block; font-weight: 600; margin-bottom: 0.3rem; color: #374151; }
+  .tool-form input, .tool-form select { width: 100%; padding: 0.6rem 0.8rem; margin-bottom: 1rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-size: 1rem; box-sizing: border-box; }
+  .tool-form input:focus, .tool-form select:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.12); }
+  .tool-form button { background: #1e3a8a; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: bold; font-size: 1rem; transition: background 0.2s; }
+  .tool-form button:hover { background: #2563eb; }
+  .result-area { margin-top: 1rem; font-size: 1.15rem; padding: 1rem 1.25rem; background: #eef2ff; border-radius: 0.75rem; border: 1px solid #c7d2fe; min-height: 2.5rem; color: #1e3a8a; }
 </style>

@@ -1,0 +1,14 @@
+---
+import CategoryLayout from '../../layouts/CategoryLayout.astro';
+import { getToolsByCategory } from '../../data/tools';
+
+const tools = getToolsByCategory('finanzas');
+---
+
+<CategoryLayout
+  title="Calculadoras financieras"
+  description="Calculadoras de porcentaje, descuento, interés compuesto, cuotas de préstamo y ahorro mensual. Herramientas financieras gratuitas."
+  categoryName="Finanzas"
+  tools={tools}
+  breadcrumbItems={[{ name: 'Finanzas' }]}
+/>
