@@ -1,0 +1,22 @@
+---
+import ToolCard from './ToolCard.astro';
+import type { Tool } from '../data/tools';
+
+const { tools, currentSlug } = Astro.props as { tools: Tool[]; currentSlug: string };
+const filtered = tools.filter(t => t.slug !== currentSlug).slice(0, 3);
+---
+{
+  filtered.length > 0 && (
+    <div class="related-tools">
+      <h3>Herramientas relacionadas</h3>
+      <div class="related-grid">
+        {filtered.map(tool => <ToolCard title={tool.name} description={tool.description} url={tool.url} icon={tool.icon} />)}
+      </div>
+    </div>
+  )
+}
+
+<style>
+  .related-tools { margin: 2rem 0; }
+  .related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1.5rem; margin-top: 1rem; }
+</style>

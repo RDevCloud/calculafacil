@@ -1,0 +1,44 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+import ToolFormShell from '../../components/ToolFormShell.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import { generateTitle, generateDescription } from '../../utils/seo';
+
+const toolName = 'Calculadora de porcentaje';
+const slug = 'porcentaje';
+const category = 'finanzas';
+const title = generateTitle(toolName);
+const description = generateDescription(toolName, 'porcentajes, aumentos y descuentos');
+const canonical = `https://calculafacil.netlify.app/finanzas/${slug}/`;
+const breadcrumbItems = [
+  { name: 'Finanzas', url: '/finanzas/' },
+  { name: toolName }
+];
+const faqs = [
+  { question: '¿Cómo se calcula el porcentaje de una cantidad?', answer: 'Para calcular el X% de una cantidad, multiplica la cantidad por X y divide entre 100.' },
+  { question: '¿Qué es un porcentaje?', answer: 'El porcentaje es una proporción por cada 100 unidades.' },
+  { question: '¿Para qué sirve esta calculadora?', answer: 'Sirve para calcular rápidamente cualquier porcentaje, ideal para descuentos, impuestos o incrementos.' }
+];
+---
+
+<ToolLayout title={title} description={description} canonical={canonical} breadcrumbItems={breadcrumbItems} toolName={toolName} toolSlug={slug} category={category} faqs={faqs}>
+  <div slot="intro">
+    <p>Calcula el porcentaje de cualquier número de forma instantánea. Introduce la cantidad y el porcentaje deseado.</p>
+    <h2>Ejemplo práctico</h2>
+    <p>Si quieres calcular el 20% de 150 €, el resultado es 30 €.</p>
+  </div>
+  <div slot="form">
+    <ToolFormShell toolName={toolName} scriptPath="porcentaje">
+      <div slot="inputs">
+        <label>Valor base:</label>
+        <input type="number" id="valor" step="any" placeholder="Ej: 150" required />
+        <label>Porcentaje (%):</label>
+        <input type="number" id="porcentaje" step="any" placeholder="Ej: 20" required />
+      </div>
+    </ToolFormShell>
+  </div>
+  <div slot="explanation">
+    <h2>¿Cómo usar la calculadora de porcentaje?</h2>
+    <p>Simplemente ingresa la cantidad total y el porcentaje que deseas calcular. Obtendrás el resultado al instante.</p>
+  </div>
+</ToolLayout>
