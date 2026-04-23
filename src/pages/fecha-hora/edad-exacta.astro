@@ -38,34 +38,19 @@ const faqs = [
 </ToolLayout>
 
 <script>
-  const form = document.getElementById('tool-form') as HTMLFormElement;
-  if (form) {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const nac = new Date((document.getElementById('nacimiento') as HTMLInputElement).value);
-      const hoy = new Date();
-      const resultDiv = document.getElementById('result');
-      if (!resultDiv || isNaN(nac.getTime())) return;
-
-      let anos  = hoy.getFullYear() - nac.getFullYear();
-      let meses = hoy.getMonth() - nac.getMonth();
-      let dias  = hoy.getDate() - nac.getDate();
-
-      if (dias < 0) {
-        meses--;
-        dias += new Date(hoy.getFullYear(), hoy.getMonth(), 0).getDate();
-      }
-      if (meses < 0) {
-        anos--;
-        meses += 12;
-      }
-
-      // Días para próximo cumpleaños
-      const cumple = new Date(hoy.getFullYear(), nac.getMonth(), nac.getDate());
-      if (cumple < hoy) cumple.setFullYear(hoy.getFullYear() + 1);
-      const diasCumple = Math.round((cumple.getTime() - hoy.getTime()) / (1000 * 60 * 60 * 24));
-
-      resultDiv.innerHTML = `<strong>${anos} años, ${meses} meses y ${dias} días</strong><br><small>Próximo cumpleaños en ${diasCumple} día(s) 🎂</small>`;
-    });
-  }
+  document.getElementById('calc-btn')?.addEventListener('click', () => {
+    const nac = new Date((document.getElementById('nacimiento') as HTMLInputElement).value);
+    const hoy = new Date();
+    const div = document.getElementById('result');
+    if (!div || isNaN(nac.getTime())) return;
+    let years = hoy.getFullYear() - nac.getFullYear();
+    let months = hoy.getMonth() - nac.getMonth();
+    let days = hoy.getDate() - nac.getDate();
+    if (days < 0) { months--; days += new Date(hoy.getFullYear(), hoy.getMonth(), 0).getDate(); }
+    if (months < 0) { years--; months += 12; }
+    const bday = new Date(hoy.getFullYear(), nac.getMonth(), nac.getDate());
+    if (bday < hoy) bday.setFullYear(hoy.getFullYear() + 1);
+    const daysLeft = Math.round((bday.getTime() - hoy.getTime()) / (1000 * 60 * 60 * 24));
+    div.innerHTML = `<strong>${years} años, ${months} meses y ${days} días</strong><br><small>Próximo cumpleaños en ${daysLeft} día(s) 🎂</small>`;
+  });
 </script>

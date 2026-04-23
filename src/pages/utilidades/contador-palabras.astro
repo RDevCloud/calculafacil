@@ -38,25 +38,14 @@ const faqs = [
 </ToolLayout>
 
 <script>
-  const form = document.getElementById('tool-form') as HTMLFormElement;
-  if (form) {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const texto = ((document.getElementById('texto') as HTMLTextAreaElement).value || '').trim();
-      const palabras  = texto ? texto.split(/\s+/).filter(w => w.length > 0).length : 0;
-      const chars     = texto.length;
-      const charsSin  = texto.replace(/\s/g, '').length;
-      const oraciones = texto ? texto.split(/[.!?]+/).filter(s => s.trim().length > 0).length : 0;
-      const parrafos  = texto ? texto.split(/\n+/).filter(p => p.trim().length > 0).length : 0;
-      const resultDiv = document.getElementById('result');
-      if (resultDiv) {
-        resultDiv.innerHTML = `
-          <strong>Palabras: ${palabras}</strong> &nbsp;|&nbsp; 
-          <strong>Caracteres: ${chars}</strong> &nbsp;|&nbsp; 
-          <strong>Sin espacios: ${charsSin}</strong><br>
-          <small>Oraciones: ${oraciones} &nbsp;|&nbsp; Párrafos: ${parrafos}</small>
-        `;
-      }
-    });
-  }
+  document.getElementById('calc-btn')?.addEventListener('click', () => {
+    const text = ((document.getElementById('texto') as HTMLTextAreaElement).value || '').trim();
+    const words = text ? text.split(/\s+/).filter((w: string) => w.length > 0).length : 0;
+    const chars = text.length;
+    const charsNoSpaces = text.replace(/\s/g,'').length;
+    const sentences = text ? text.split(/[.!?]+/).filter((s: string) => s.trim().length > 0).length : 0;
+    const paragraphs = text ? text.split(/\n+/).filter((p: string) => p.trim().length > 0).length : 0;
+    const div = document.getElementById('result');
+    if (div) div.innerHTML = `<strong>Palabras: ${words}</strong> &nbsp;|&nbsp; <strong>Caracteres: ${chars}</strong> &nbsp;|&nbsp; <strong>Sin espacios: ${charsNoSpaces}</strong><br><small>Oraciones: ${sentences} &nbsp;|&nbsp; Párrafos: ${paragraphs}</small>`;
+  });
 </script>

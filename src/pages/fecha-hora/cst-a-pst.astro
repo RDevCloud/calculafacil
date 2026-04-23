@@ -40,18 +40,14 @@ const faqs = [
 </ToolLayout>
 
 <script>
-  const form = document.getElementById('tool-form') as HTMLFormElement;
-  if (form) {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const valor = (document.getElementById('hora-cst') as HTMLInputElement).value;
-      const [hh, mm] = valor.split(':').map(Number);
-      let pstH = hh - 2;
-      let dia = '';
-      if (pstH < 0) { pstH += 24; dia = ' (día anterior)'; }
-      const pst = `${String(pstH).padStart(2, '0')}:${String(mm).padStart(2, '0')}`;
-      const resultDiv = document.getElementById('result');
-      if (resultDiv) resultDiv.innerHTML = `<strong>${valor} CST = ${pst} PST${dia}</strong>`;
-    });
-  }
+  document.getElementById('calc-btn')?.addEventListener('click', () => {
+    const val = (document.getElementById('hora-cst') as HTMLInputElement).value;
+    const [hh, mm] = val.split(':').map(Number);
+    let pstH = hh - 2;
+    let note = '';
+    if (pstH < 0) { pstH += 24; note = ' (día anterior)'; }
+    const pst = `${String(pstH).padStart(2,'0')}:${String(mm).padStart(2,'0')}`;
+    const div = document.getElementById('result');
+    if (div) div.innerHTML = `<strong>${val} CST = ${pst} PST${note}</strong>`;
+  });
 </script>

@@ -52,22 +52,16 @@ const faqs = [
     return c === 'EUR' ? `${rounded.toFixed(2)} €` : `${s}${rounded.toFixed(2)} ${c}`;
   }
 
-  const form = document.getElementById('tool-form') as HTMLFormElement;
-  if (form) {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const P = parseFloat((document.getElementById('monto') as HTMLInputElement).value || '0');
-      const tasaAnual = parseFloat((document.getElementById('tasa') as HTMLInputElement).value || '0');
-      const n = parseInt((document.getElementById('meses') as HTMLInputElement).value || '0');
-      const r = tasaAnual / 100 / 12;
-      // Usar Math.round para evitar errores de punto flotante
-      const rawCuota = r === 0 ? P / n : P * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
-      const cuota    = Math.round(rawCuota * 100) / 100;
-      const total    = Math.round(cuota * n * 100) / 100;
-      const intereses = Math.round((total - P) * 100) / 100;
-      const resultDiv = document.getElementById('result');
-      if (resultDiv) resultDiv.innerHTML = `<strong>Cuota mensual: ${fmt(cuota)} &nbsp;|&nbsp; Total intereses: ${fmt(intereses)}</strong>`;
-    });
-  }
+  document.getElementById('calc-btn')?.addEventListener('click', () => {
+    const P = parseFloat((document.getElementById('monto') as HTMLInputElement).value || '0');
+    const rate = parseFloat((document.getElementById('tasa') as HTMLInputElement).value || '0');
+    const n = parseInt((document.getElementById('meses') as HTMLInputElement).value || '0');
+    const r = rate / 100 / 12;
+    const rawM = r === 0 ? P / n : P * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+    const monthly = Math.round(rawM * 100) / 100;
+    const totalInterest = Math.round((monthly * n - P) * 100) / 100;
+    const div = document.getElementById('result');
+    if (div) div.innerHTML = `<strong>Cuota mensual: ${fmt(monthly)} &nbsp;|&nbsp; Interés total: ${fmt(totalInterest)}</strong>`;
+  });
 </script>
 

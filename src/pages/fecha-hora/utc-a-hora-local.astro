@@ -58,19 +58,15 @@ const faqs = [
 </ToolLayout>
 
 <script>
-  const form = document.getElementById('tool-form') as HTMLFormElement;
-  if (form) {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const valor = (document.getElementById('hora-utc') as HTMLInputElement).value;
-      const offset = parseFloat((document.getElementById('offset') as HTMLSelectElement).value);
-      const [hh, mm] = valor.split(':').map(Number);
-      const totalMin = hh * 60 + mm + offset * 60;
-      const localH = Math.floor(((totalMin % 1440) + 1440) % 1440 / 60);
-      const localM = Math.floor(((totalMin % 1440) + 1440) % 1440 % 60);
-      const local  = `${String(localH).padStart(2, '0')}:${String(localM).padStart(2, '0')}`;
-      const resultDiv = document.getElementById('result');
-      if (resultDiv) resultDiv.innerHTML = `<strong>${valor} UTC = ${local} hora local (UTC${offset >= 0 ? '+' : ''}${offset})</strong>`;
-    });
-  }
+  document.getElementById('calc-btn')?.addEventListener('click', () => {
+    const val    = (document.getElementById('hora-utc') as HTMLInputElement).value;
+    const offset = parseFloat((document.getElementById('offset') as HTMLSelectElement).value);
+    const [hh, mm] = val.split(':').map(Number);
+    const totalMin = hh * 60 + mm + offset * 60;
+    const lH = Math.floor(((totalMin % 1440) + 1440) % 1440 / 60);
+    const lM = Math.floor(((totalMin % 1440) + 1440) % 1440 % 60);
+    const local = `${String(lH).padStart(2,'0')}:${String(lM).padStart(2,'0')}`;
+    const div = document.getElementById('result');
+    if (div) div.innerHTML = `<strong>${val} UTC = ${local} hora local (UTC${offset >= 0 ? '+' : ''}${offset})</strong>`;
+  });
 </script>

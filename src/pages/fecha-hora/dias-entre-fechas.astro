@@ -40,25 +40,17 @@ const faqs = [
 </ToolLayout>
 
 <script>
-  const form = document.getElementById('tool-form') as HTMLFormElement;
-  if (form) {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const d1 = new Date((document.getElementById('fecha1') as HTMLInputElement).value);
-      const d2 = new Date((document.getElementById('fecha2') as HTMLInputElement).value);
-      const diffMs = d2.getTime() - d1.getTime();
-      const dias   = Math.round(diffMs / (1000 * 60 * 60 * 24));
-      const semanas = (dias / 7).toFixed(1);
-      const meses  = (dias / 30.44).toFixed(1);
-      const resultDiv = document.getElementById('result');
-      if (!resultDiv) return;
-      if (isNaN(dias)) {
-        resultDiv.innerHTML = `<strong>Por favor ingresa ambas fechas.</strong>`;
-      } else if (dias < 0) {
-        resultDiv.innerHTML = `<strong>La fecha final debe ser posterior a la inicial.</strong>`;
-      } else {
-        resultDiv.innerHTML = `<strong>${Math.abs(dias)} días &nbsp;|&nbsp; ${semanas} semanas &nbsp;|&nbsp; ${meses} meses</strong>`;
-      }
-    });
-  }
+  document.getElementById('calc-btn')?.addEventListener('click', () => {
+    const d1 = new Date((document.getElementById('fecha1') as HTMLInputElement).value);
+    const d2 = new Date((document.getElementById('fecha2') as HTMLInputElement).value);
+    const diffMs = d2.getTime() - d1.getTime();
+    const dias  = Math.round(diffMs / (1000 * 60 * 60 * 24));
+    const semanas = (dias / 7).toFixed(1);
+    const meses = (dias / 30.44).toFixed(1);
+    const div = document.getElementById('result');
+    if (!div) return;
+    if (isNaN(dias)) { div.innerHTML = '<strong>Introduce ambas fechas.</strong>'; return; }
+    if (dias < 0) { div.innerHTML = '<strong>La fecha final debe ser posterior.</strong>'; return; }
+    div.innerHTML = `<strong>${Math.abs(dias)} días &nbsp;|&nbsp; ${semanas} semanas &nbsp;|&nbsp; ${meses} meses</strong>`;
+  });
 </script>
