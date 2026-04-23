@@ -17,23 +17,23 @@ export interface Props {
   toolSlug: string;
   category: string;
   faqs: FAQItem[];
+  lang?: string;
 }
-const { title, description, canonical, breadcrumbItems, toolName, toolSlug, category, faqs } = Astro.props;
+const { title, description, canonical, breadcrumbItems, toolName, toolSlug, category, faqs, lang = 'es' } = Astro.props;
 const relatedTools = getToolsByCategory(category).filter(t => t.slug !== toolSlug).slice(0, 3);
 ---
 
 <BaseLayout title={title} description={description} canonical={canonical}>
   <div class="tool-layout">
-    <Breadcrumbs items={breadcrumbItems} />
-    
+    <Breadcrumbs items={breadcrumbItems} lang={lang} />
     <div class="tool-main">
       <div class="tool-content">
         <h1>{toolName}</h1>
         <slot name="intro" />
         <slot name="form" />
         <slot name="explanation" />
-        <FAQ faqs={faqs} />
-        <RelatedTools tools={relatedTools} currentSlug={toolSlug} />
+        <FAQ faqs={faqs} lang={lang} />
+        <RelatedTools tools={relatedTools} currentSlug={toolSlug} lang={lang} />
       </div>
       <aside class="tool-sidebar">
         <AdSlot format="vertical" />

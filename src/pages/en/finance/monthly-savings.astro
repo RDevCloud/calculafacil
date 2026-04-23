@@ -1,0 +1,62 @@
+---
+import ToolLayout from '../../../layouts/ToolLayout.astro';
+import ToolFormShell from '../../../components/ToolFormShell.astro';
+
+const lang = 'en';
+const toolName = 'Monthly Savings Calculator';
+const slug = 'ahorro-mensual';
+const category = 'finanzas';
+const canonical = 'https://calculafacilito.netlify.app/en/finance/monthly-savings/';
+const breadcrumbItems = [{ name: 'Finance', url: '/en/finance/' }, { name: toolName }];
+const faqs = [
+  { question: 'How do I calculate how much to save per month?', answer: 'Divide your savings goal by the number of months available. If you already have some savings, subtract them first.' },
+  { question: 'Why is monthly saving important?', answer: 'Consistent saving lets you reach financial goals without relying on windfalls or debt.' },
+];
+---
+
+<ToolLayout title={toolName} description="Free monthly savings calculator. Find out how much you need to save each month to reach your financial goal." canonical={canonical} breadcrumbItems={breadcrumbItems} toolName={toolName} toolSlug={slug} category={category} faqs={faqs} lang={lang}>
+  <div slot="intro">
+    <p>Find out how much to save each month to reach your goal in the desired time.</p>
+    <h2>Example</h2>
+    <p>To save $3,000 in 12 months starting from $0, you need to save $250/month.</p>
+  </div>
+  <div slot="form">
+    <ToolFormShell toolName={toolName}>
+      <div slot="inputs">
+        <label>Savings goal:</label>
+        <input type="number" id="meta" step="any" placeholder="e.g. 3000" required />
+        <label>Current savings:</label>
+        <input type="number" id="actual" step="any" placeholder="e.g. 0" value="0" />
+        <label>Time period (months):</label>
+        <input type="number" id="meses" step="1" placeholder="e.g. 12" required />
+      </div>
+    </ToolFormShell>
+  </div>
+  <div slot="explanation">
+    <h2>How it works</h2>
+    <p>Formula: <strong>Monthly savings = (Goal − Current savings) ÷ Months</strong>.</p>
+  </div>
+</ToolLayout>
+
+<script>
+  function fmt(n: number): string {
+    const c = localStorage.getItem('cf_currency') || 'EUR';
+    const syms: Record<string, string> = { EUR:'€', USD:'$', MXN:'$', COP:'$', GBP:'£', ARS:'$', BRL:'R$' };
+    const s = syms[c] ?? '€'; const r = Math.round(n * 100) / 100;
+    return c === 'EUR' ? `${r.toFixed(2)} €` : `${s}${r.toFixed(2)} ${c}`;
+  }
+  const form = document.getElementById('tool-form') as HTMLFormElement;
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const goal    = parseFloat((document.getElementById('meta') as HTMLInputElement).value || '0');
+      const current = parseFloat((document.getElementById('actual') as HTMLInputElement).value || '0');
+      const months  = parseFloat((document.getElementById('meses') as HTMLInputElement).value || '1');
+      const monthly = (goal - current) / months;
+      const div = document.getElementById('result');
+      if (div) div.innerHTML = monthly <= 0
+        ? `<strong>🎉 You've already reached your goal!</strong>`
+        : `<strong>You need to save: ${fmt(monthly)} / month</strong>`;
+    });
+  }
+</script>

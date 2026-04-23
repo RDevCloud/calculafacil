@@ -1,0 +1,72 @@
+---
+import ToolLayout from '../../../layouts/ToolLayout.astro';
+import ToolFormShell from '../../../components/ToolFormShell.astro';
+
+const lang = 'en';
+const toolName = 'UTC to Local Time Converter';
+const slug = 'utc-a-hora-local';
+const category = 'fecha-hora';
+const canonical = 'https://calculafacilito.netlify.app/en/date-time/utc-to-local/';
+const breadcrumbItems = [{ name: 'Date & Time', url: '/en/date-time/' }, { name: toolName }];
+const faqs = [
+  { question: 'What is UTC?', answer: 'UTC (Coordinated Universal Time) is the world\'s primary time standard. Your local time is expressed as UTC ± offset.' },
+  { question: 'How do I know my UTC offset?', answer: 'US Eastern (EST) is UTC-5, US Pacific (PST) is UTC-8, UK (GMT) is UTC+0, Central Europe (CET) is UTC+1.' },
+];
+---
+
+<ToolLayout title={toolName} description="Free UTC to local time converter. Convert any UTC time to your timezone by selecting your UTC offset." canonical={canonical} breadcrumbItems={breadcrumbItems} toolName={toolName} toolSlug={slug} category={category} faqs={faqs} lang={lang}>
+  <div slot="intro">
+    <p>Convert any UTC time to your local timezone by selecting your UTC offset.</p>
+  </div>
+  <div slot="form">
+    <ToolFormShell toolName={toolName}>
+      <div slot="inputs">
+        <label>UTC time (HH:MM):</label>
+        <input type="time" id="hora-utc" required />
+        <label>Your UTC offset:</label>
+        <select id="offset">
+          <option value="-12">UTC-12</option>
+          <option value="-11">UTC-11</option>
+          <option value="-10">UTC-10 (HST)</option>
+          <option value="-9">UTC-9 (AKST)</option>
+          <option value="-8">UTC-8 (PST)</option>
+          <option value="-7">UTC-7 (MST/PDT)</option>
+          <option value="-6">UTC-6 (CST/MDT)</option>
+          <option value="-5" selected>UTC-5 (EST/CDT)</option>
+          <option value="-4">UTC-4 (EDT/AST)</option>
+          <option value="-3">UTC-3</option>
+          <option value="0">UTC+0 (GMT/WET)</option>
+          <option value="1">UTC+1 (CET)</option>
+          <option value="2">UTC+2 (CEST/EET)</option>
+          <option value="3">UTC+3 (MSK)</option>
+          <option value="5.5">UTC+5:30 (IST)</option>
+          <option value="8">UTC+8 (CST/SGT)</option>
+          <option value="9">UTC+9 (JST/KST)</option>
+          <option value="10">UTC+10 (AEST)</option>
+        </select>
+      </div>
+    </ToolFormShell>
+  </div>
+  <div slot="explanation">
+    <h2>How it works</h2>
+    <p>Add your timezone offset to the UTC time to get your local time.</p>
+  </div>
+</ToolLayout>
+
+<script>
+  const form = document.getElementById('tool-form') as HTMLFormElement;
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const val    = (document.getElementById('hora-utc') as HTMLInputElement).value;
+      const offset = parseFloat((document.getElementById('offset') as HTMLSelectElement).value);
+      const [hh, mm] = val.split(':').map(Number);
+      const totalMin = hh * 60 + mm + offset * 60;
+      const lH = Math.floor(((totalMin % 1440) + 1440) % 1440 / 60);
+      const lM = Math.floor(((totalMin % 1440) + 1440) % 1440 % 60);
+      const local = `${String(lH).padStart(2,'0')}:${String(lM).padStart(2,'0')}`;
+      const div = document.getElementById('result');
+      if (div) div.innerHTML = `<strong>${val} UTC = ${local} local time (UTC${offset >= 0 ? '+' : ''}${offset})</strong>`;
+    });
+  }
+</script>

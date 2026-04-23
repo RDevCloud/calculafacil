@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Cookie Policy" description="EasyCalc cookie policy. Learn what cookies we use, why, and how to manage them.">
+  <div class="static-page">
+    <h1>Cookie Policy</h1>
+    <p class="updated">Last updated: April 2026</p>
+    <h2>What are cookies?</h2>
+    <p>Cookies are small text files that websites store in your browser to remember preferences or to show relevant advertising.</p>
+    <h2>Cookies we use</h2>
+    <div class="cookie-table-wrapper">
+      <table class="cookie-table">
+        <thead><tr><th>Cookie</th><th>Type</th><th>Purpose</th><th>Duration</th></tr></thead>
+        <tbody>
+          <tr><td><code>cf_currency</code></td><td>Own</td><td>Remember your selected currency</td><td>Permanent (localStorage)</td></tr>
+          <tr><td><code>cf_lang</code></td><td>Own</td><td>Remember your language preference</td><td>Permanent (localStorage)</td></tr>
+          <tr><td><code>cf_consent</code></td><td>Own</td><td>Store your cookie decision</td><td>Permanent (localStorage)</td></tr>
+          <tr><td><code>__gads / IDE</code></td><td>Google AdSense</td><td>Show relevant ads (only if accepted)</td><td>Up to 13 months</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h2>Google AdSense cookies</h2>
+    <p>We use Google AdSense to display ads. Google may use cookies to personalize ads based on your browsing history. See <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">Google's advertising policy</a> and manage preferences at <a href="https://adssettings.google.com" target="_blank" rel="noopener">adssettings.google.com</a>.</p>
+    <h2>Manage your preferences</h2>
+    <div class="consent-actions">
+      <button id="accept-all" class="btn-accept">✅ Accept all cookies</button>
+      <button id="decline-all" class="btn-decline">❌ Decline optional cookies</button>
+    </div>
+    <p id="consent-status" class="consent-status"></p>
+  </div>
+</BaseLayout>
+<script>
+  const status = document.getElementById('consent-status');
+  const c = localStorage.getItem('cf_consent');
+  if (status) status.textContent = c === 'granted' ? '✅ Current status: All cookies accepted.' : c === 'denied' ? '❌ Current status: Optional cookies declined.' : 'ℹ️ Current status: No decision made yet.';
+  document.getElementById('accept-all')?.addEventListener('click', () => {
+    localStorage.setItem('cf_consent', 'granted');
+    if (typeof (window as any).gtag === 'function') (window as any).gtag('consent', 'update', { ad_storage:'granted', ad_user_data:'granted', ad_personalization:'granted', analytics_storage:'granted' });
+    if (status) status.textContent = '✅ Current status: All cookies accepted.';
+  });
+  document.getElementById('decline-all')?.addEventListener('click', () => {
+    localStorage.setItem('cf_consent', 'denied');
+    if (typeof (window as any).gtag === 'function') (window as any).gtag('consent', 'update', { ad_storage:'denied', ad_user_data:'denied', ad_personalization:'denied', analytics_storage:'denied' });
+    if (status) status.textContent = '❌ Current status: Optional cookies declined.';
+  });
+</script>
+<style>
+  .static-page { max-width: 800px; margin: 0 auto; padding: 2rem 0; }
+  .static-page h1 { font-size: 2rem; margin-bottom: .5rem; }
+  .updated { font-size: .875rem; color: #6b7280; margin-bottom: 2rem; }
+  .static-page h2 { font-size: 1.2rem; margin: 2rem 0 .75rem; color: #1e3a8a; }
+  .static-page p { color: #374151; line-height: 1.8; margin-bottom: .75rem; }
+  .cookie-table-wrapper { overflow-x: auto; margin: 1rem 0; }
+  .cookie-table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+  .cookie-table th { background: #1e3a8a; color: white; padding: .6rem .9rem; text-align: left; }
+  .cookie-table td { padding: .6rem .9rem; border-bottom: 1px solid #e5e7eb; color: #374151; }
+  .cookie-table tr:nth-child(even) td { background: #f9fafb; }
+  code { background: #f3f4f6; padding: .1rem .35rem; border-radius: .25rem; font-size: .85rem; }
+  .consent-actions { display: flex; gap: 1rem; flex-wrap: wrap; margin: 1.5rem 0 .75rem; }
+  .btn-accept, .btn-decline { padding: .65rem 1.25rem; border: none; border-radius: .5rem; font-size: .95rem; font-weight: 600; cursor: pointer; }
+  .btn-accept { background: #2563eb; color: white; }
+  .btn-decline { background: #374151; color: #f9fafb; }
+  .consent-status { font-size: .9rem; color: #4b5563; font-style: italic; }
+</style>

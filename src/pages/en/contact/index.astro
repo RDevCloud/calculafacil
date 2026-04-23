@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Contact" description="Contact the EasyCalc team with suggestions, bug reports, or new tool requests.">
+  <div class="static-page">
+    <h1>Contact</h1>
+    <p class="lead">Have a question, suggestion, or found a bug? We'd love to hear from you.</p>
+    <div class="contact-card">
+      <h2>📬 Send us a message</h2>
+      <form id="contact-form" class="contact-form">
+        <label for="nombre">Your name</label>
+        <input type="text" id="nombre" name="nombre" placeholder="e.g. John Smith" required />
+        <label for="email">Email address</label>
+        <input type="email" id="email" name="email" placeholder="you@email.com" required />
+        <label for="asunto">Subject</label>
+        <select id="asunto" name="asunto">
+          <option value="sugerencia">Tool suggestion</option>
+          <option value="error">Report a bug</option>
+          <option value="otro">Other</option>
+        </select>
+        <label for="mensaje">Message</label>
+        <textarea id="mensaje" name="mensaje" rows="5" placeholder="Write your message here..." required></textarea>
+        <button type="submit">Send message</button>
+        <div id="form-msg" class="form-msg hidden"></div>
+      </form>
+    </div>
+    <div class="contact-info">
+      <h2>🕐 Response time</h2>
+      <p>We check messages regularly and typically respond within 24-48 business hours.</p>
+    </div>
+  </div>
+</BaseLayout>
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement;
+  const msg  = document.getElementById('form-msg');
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (msg) { msg.textContent = '✅ Thank you! Your message has been received. We\'ll reply soon.'; msg.className = 'form-msg success'; }
+    form.reset();
+  });
+</script>
+<style>
+  .static-page { max-width: 700px; margin: 0 auto; padding: 2rem 0; }
+  .static-page h1 { font-size: 2rem; margin-bottom: 1rem; }
+  .static-page h2 { font-size: 1.25rem; margin: 2rem 0 .75rem; color: #1e3a8a; }
+  .static-page p { color: #374151; line-height: 1.8; }
+  .lead { font-size: 1.1rem; color: #4b5563; font-style: italic; margin-bottom: 2rem; }
+  .contact-card { background: #fff; border-radius: 1rem; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,.08); margin-bottom: 2rem; }
+  .contact-form label { display: block; font-weight: 600; margin-bottom: .3rem; color: #374151; }
+  .contact-form input, .contact-form select, .contact-form textarea { width: 100%; padding: .65rem .9rem; border: 1px solid #d1d5db; border-radius: .5rem; font-size: 1rem; margin-bottom: 1.2rem; box-sizing: border-box; font-family: inherit; }
+  .contact-form button { background: #1e3a8a; color: white; font-size: 1rem; font-weight: 600; padding: .75rem 2rem; border: none; border-radius: .5rem; cursor: pointer; }
+  .contact-form button:hover { background: #2563eb; }
+  .form-msg { margin-top: 1rem; padding: .75rem 1rem; border-radius: .5rem; }
+  .form-msg.success { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
+  .form-msg.hidden { display: none; }
+</style>

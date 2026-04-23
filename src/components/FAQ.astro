@@ -1,12 +1,10 @@
 ---
-export interface FAQItem {
-  question: string;
-  answer: string;
-}
-const { faqs } = Astro.props as { faqs: FAQItem[] };
+export interface FAQItem { question: string; answer: string; }
+const { faqs, lang = 'es' } = Astro.props as { faqs: FAQItem[]; lang?: string };
+const heading = lang === 'en' ? 'Frequently Asked Questions' : 'Preguntas frecuentes';
 ---
 <div class="faq-section">
-  <h2>Preguntas frecuentes</h2>
+  <h2>{heading}</h2>
   <div class="faq-list">
     {faqs.map((faq, idx) => (
       <details class="faq-item" open={idx === 0 ? true : false}>

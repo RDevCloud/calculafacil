@@ -1,8 +1,10 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import CookieConsent from '../components/CookieConsent.astro';
+import { urlToEn, urlToEs } from '../i18n/url-map';
 import '../styles/global.css';
+
+const BASE = 'https://calculafacilito.netlify.app';
 
 export interface Props {
   title: string;
@@ -13,6 +15,14 @@ export interface Props {
 const { title, description, canonical, ogImage } = Astro.props;
 const siteTitle = 'CalculaFácil';
 const fullTitle = title === siteTitle ? title : `${title} | ${siteTitle}`;
+
+// Auto-generate hreflang URLs from current path
+const path = Astro.url.pathname;
+const isEn = path.startsWith('/en/');
+const esPath = isEn ? (urlToEs[path] ?? '/') : path;
+const enPath = isEn ? path : (urlToEn[path] ?? '/en/');
+const esHref = `${BASE}${esPath}`;
+const enHref = `${BASE}${enPath}`;
 ---
 <!doctype html>
 <html lang="es">
@@ -30,6 +40,10 @@ const fullTitle = title === siteTitle ? title : `${title} | ${siteTitle}`;
     <meta property="og:type" content="website" />
     <meta property="og:image" content={ogImage || '/og/default.jpg'} />
     <meta name="twitter:card" content="summary_large_image" />
+    <!-- hreflang for bilingual SEO -->
+    <link rel="alternate" hreflang="es" href={esHref} />
+    <link rel="alternate" hreflang="en" href={enHref} />
+    <link rel="alternate" hreflang="x-default" href={esHref} />
     <!-- Google Consent Mode v2: default denied until user accepts -->
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -56,7 +70,7 @@ const fullTitle = title === siteTitle ? title : `${title} | ${siteTitle}`;
       </div>
     </main>
     <Footer />
-    <CookieConsent />
+    <!-- Google CMP aparecerá aquí automáticamente -->
   </body>
 </html>
 

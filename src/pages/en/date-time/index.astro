@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ToolCard from '../../../components/ToolCard.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+
+const tools = [
+  { title: 'Days Between Dates', description: 'Calculate days, weeks or months between two dates.', url: '/en/date-time/days-between-dates/', icon: '📅' },
+  { title: 'Exact Age Calculator', description: 'Find your exact age in years, months, and days.', url: '/en/date-time/exact-age/', icon: '🎂' },
+  { title: 'CST to PST Converter', description: 'Convert Central Time to Pacific Time instantly.', url: '/en/date-time/cst-to-pst/', icon: '🌎' },
+  { title: 'UTC to Local Time', description: 'Convert any UTC time to your local timezone.', url: '/en/date-time/utc-to-local/', icon: '⏰' },
+];
+---
+<BaseLayout title="Date & Time Calculators" description="Free date and time calculators: days between dates, age calculator, CST to PST, UTC to local time converter.">
+  <Breadcrumbs items={[{ name: 'Date & Time' }]} lang="en" />
+  <h1>Date & Time Calculators</h1>
+  <p class="cat-desc">Explore all our free date and time tools.</p>
+  <div class="tools-grid">
+    {tools.map(tool => <ToolCard {...tool} />)}
+  </div>
+</BaseLayout>
+<style>
+  .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 1.5rem; margin-top: 2rem; }
+  .cat-desc { font-size: 1.125rem; color: #4b5563; margin-bottom: 1rem; }
+</style>

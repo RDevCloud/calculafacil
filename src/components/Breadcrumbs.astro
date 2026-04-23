@@ -1,13 +1,15 @@
 ---
-// Recibe un array de { name, url } (opcional)
 export interface Props {
   items: { name: string; url?: string }[];
+  lang?: string;
 }
-const { items } = Astro.props;
+const { items, lang = 'es' } = Astro.props;
+const home = lang === 'en' ? 'Home' : 'Inicio';
+const homeHref = lang === 'en' ? '/en/' : '/';
 ---
-<nav aria-label="Migajas de pan" class="breadcrumbs">
+<nav aria-label={lang === 'en' ? 'Breadcrumb' : 'Migajas de pan'} class="breadcrumbs">
   <ol>
-    <li><a href="/">Inicio</a></li>
+    <li><a href={homeHref}>{home}</a></li>
     {items.map((item, idx) => (
       <li>
         {item.url ? <a href={item.url}>{item.name}</a> : <span>{item.name}</span>}

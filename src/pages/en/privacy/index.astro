@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Privacy Policy" description="EasyCalc privacy policy. Learn how we handle your information and your rights.">
+  <div class="static-page">
+    <h1>Privacy Policy</h1>
+    <p class="updated">Last updated: April 2026</p>
+    <h2>1. About this site</h2>
+    <p>EasyCalc (<strong>calculafacilito.netlify.app</strong>) is a free online calculator tool website.</p>
+    <h2>2. Data we collect</h2>
+    <p>EasyCalc <strong>does not request or store personal data</strong> from users. All calculations run directly in your browser and are never sent to any server.</p>
+    <p>However, we use third-party services that may collect anonymous data:</p>
+    <ul><li><strong>Google AdSense</strong>: Shows ads and may use cookies to personalize advertising. See <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's privacy policy</a>.</li></ul>
+    <h2>3. Cookies</h2>
+    <p>We use our own cookies (to remember your currency and language preferences) and third-party cookies (Google AdSense). Manage your preferences on our <a href="/en/cookies/">cookie policy page</a>.</p>
+    <h2>4. Your rights</h2>
+    <p>Since we do not collect personally identifiable data, there is no personal information to delete or correct. For Google AdSense-related matters, contact Google directly.</p>
+    <h2>5. Changes</h2>
+    <p>We may update this policy occasionally. The last updated date will always be shown at the top of this page.</p>
+    <h2>6. Contact</h2>
+    <p>Questions? Use our <a href="/en/contact/">contact page</a>.</p>
+  </div>
+</BaseLayout>
+<style>
+  .static-page { max-width: 760px; margin: 0 auto; padding: 2rem 0; }
+  .static-page h1 { font-size: 2rem; margin-bottom: .5rem; }
+  .updated { font-size: .875rem; color: #6b7280; margin-bottom: 2rem; }
+  .static-page h2 { font-size: 1.2rem; margin: 2rem 0 .75rem; color: #1e3a8a; }
+  .static-page p, .static-page li { color: #374151; line-height: 1.8; margin-bottom: .75rem; }
+  .static-page ul { padding-left: 1.5rem; }
+</style>

@@ -4,7 +4,7 @@ const { toolName } = Astro.props;
 <div class="tool-form-container" data-tool={toolName}>
   <form id="tool-form" class="tool-form">
     <slot name="inputs" />
-    <button type="submit">Calcular</button>
+    <button type="submit" data-es="Calcular" data-en="Calculate">Calcular</button>
   </form>
   <div id="result" class="result-area"></div>
 </div>

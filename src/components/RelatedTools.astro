@@ -2,13 +2,14 @@
 import ToolCard from './ToolCard.astro';
 import type { Tool } from '../data/tools';
 
-const { tools, currentSlug } = Astro.props as { tools: Tool[]; currentSlug: string };
+const { tools, currentSlug, lang = 'es' } = Astro.props as { tools: Tool[]; currentSlug: string; lang?: string };
 const filtered = tools.filter(t => t.slug !== currentSlug).slice(0, 3);
+const heading = lang === 'en' ? 'Related Tools' : 'Herramientas relacionadas';
 ---
 {
   filtered.length > 0 && (
     <div class="related-tools">
-      <h3>Herramientas relacionadas</h3>
+      <h3>{heading}</h3>
       <div class="related-grid">
         {filtered.map(tool => <ToolCard title={tool.name} description={tool.description} url={tool.url} icon={tool.icon} />)}
       </div>

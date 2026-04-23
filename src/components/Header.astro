@@ -12,9 +12,9 @@ const currentPath = Astro.url.pathname;
     </div>
     <nav class="main-nav" aria-label="Navegación principal">
       <ul>
-        <li><a href="/finanzas/"   class={currentPath.startsWith('/finanzas')   ? 'active' : ''}>Finanzas</a></li>
-        <li><a href="/fecha-hora/" class={currentPath.startsWith('/fecha-hora') ? 'active' : ''}>Fecha y hora</a></li>
-        <li><a href="/utilidades/" class={currentPath.startsWith('/utilidades') ? 'active' : ''}>Utilidades</a></li>
+        <li><a href="/finanzas/"   class={currentPath.startsWith('/finanzas')   ? 'active' : ''} data-es="Finanzas"    data-en="Finance">Finanzas</a></li>
+        <li><a href="/fecha-hora/" class={currentPath.startsWith('/fecha-hora') ? 'active' : ''} data-es="Fecha y hora" data-en="Date & Time">Fecha y hora</a></li>
+        <li><a href="/utilidades/" class={currentPath.startsWith('/utilidades') ? 'active' : ''} data-es="Utilidades"   data-en="Tools">Utilidades</a></li>
       </ul>
     </nav>
     <div class="header-controls">
@@ -33,6 +33,8 @@ const currentPath = Astro.url.pathname;
 </header>
 
 <script>
+  import { urlToEn, urlToEs } from '../i18n/url-map';
+
   // --- Currency ---
   const currencySelect = document.getElementById('currency-select') as HTMLSelectElement;
   const savedCurrency = localStorage.getItem('cf_currency') || 'EUR';
@@ -44,20 +46,24 @@ const currentPath = Astro.url.pathname;
 
   // --- Language ---
   const langBtn = document.getElementById('lang-toggle') as HTMLButtonElement;
-  const defaultLang = navigator.language?.startsWith('en') ? 'en' : 'es';
-  const savedLang = localStorage.getItem('cf_lang') || defaultLang;
+  const currentPath = window.location.pathname;
+  const isEn = currentPath.startsWith('/en/');
 
-  function applyLang(lang: string) {
-    document.documentElement.lang = lang;
-    langBtn.textContent = `🌐 ${lang.toUpperCase()}`;
-    localStorage.setItem('cf_lang', lang);
-  }
-
-  applyLang(savedLang);
+  // Update button to show current lang
+  langBtn.textContent = isEn ? '🌐 EN' : '🌐 ES';
+  localStorage.setItem('cf_lang', isEn ? 'en' : 'es');
+  document.documentElement.lang = isEn ? 'en' : 'es';
 
   langBtn.addEventListener('click', () => {
-    const current = localStorage.getItem('cf_lang') || 'es';
-    applyLang(current === 'es' ? 'en' : 'es');
+    if (isEn) {
+      // Go to Spanish equivalent
+      const esPath = urlToEs[currentPath] ?? '/';
+      window.location.href = esPath;
+    } else {
+      // Go to English equivalent
+      const enPath = urlToEn[currentPath] ?? '/en/';
+      window.location.href = enPath;
+    }
   });
 </script>
 
