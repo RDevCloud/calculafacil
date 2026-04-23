@@ -15,28 +15,35 @@ const staticPages = [
 ];
 
 function normalizePath(path: string) {
+  path = path.trim();
+
   if (!path.startsWith('/')) path = `/${path}`;
-  if (!path.endsWith('/')) path = `${path}/`;
-  return path;
+  if (path !== '/' && !path.endsWith('/')) path = `${path}/`;
+
+  return path.replace(/\/{2,}/g, '/');
 }
 
 function joinUrl(base: string, path: string) {
-  return `${base.replace(/\/$/, '')}${path}`;
+  const cleanBase = base.replace(/\/+$/, '');
+  const cleanPath = normalizePath(path);
+  return `${cleanBase}${cleanPath}`;
 }
 
 export const GET: APIRoute = async ({ site }) => {
-  const base = site?.href || 'https://calculafacilito.netlify.app';
+  const base = (site?.href || 'https://calculafacilito.netlify.app').replace(/\/+$/, '');
   const tools = getAllTools();
 
   const urls = [
-    ...staticPages.map((page) => joinUrl(base, normalizePath(page))),
-    ...tools.map((tool) => joinUrl(base, normalizePath(tool.url))),
-    ...categories.map((cat) => joinUrl(base, normalizePath(cat.slug))),
+    ...staticPages.map((page) => joinUrl(base, page)),
+    ...tools.map((tool) => joinUrl(base, tool.url)),
+    ...categories.map((cat) => joinUrl(base, cat.slug)),
   ];
+
+  const uniqueUrls = [...new Set(urls)];
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls
+${uniqueUrls
   .map(
     (url) => `  <url>
     <loc>${url}</loc>
