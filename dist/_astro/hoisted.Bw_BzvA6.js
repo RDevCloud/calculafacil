@@ -1,0 +1,1 @@
+import"./hoisted.BKoqXAcy.js";const t=document.getElementById("contact-form"),e=document.getElementById("form-msg");t?.addEventListener("submit",s=>{s.preventDefault(),e&&(e.textContent="✅ Thank you! Your message has been received. We'll reply soon.",e.className="form-msg success"),t.reset()});
