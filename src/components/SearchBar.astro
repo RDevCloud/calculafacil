@@ -1,21 +1,143 @@
 ---
-// Solo renderiza el contenedor HTML, la lógica JS se carga aparte
+import { getAllTools } from '../data/tools';
+const tools = getAllTools();
 ---
 
 <div class="search-container">
-  <input type="text" id="search-input" placeholder="Buscar calculadora (ej: porcentaje, edad, descuento)..." autocomplete="off" />
-  <div id="search-results" class="search-results hidden"></div>
+  <input
+    type="text"
+    id="search-input"
+    placeholder="Buscar calculadora (ej: porcentaje, edad, descuento)..."
+    autocomplete="off"
+    aria-label="Buscar herramienta"
+  />
+  <div id="search-results" class="search-results hidden">
+    {tools.map(tool => (
+      <a
+        href={tool.url}
+        class="search-item"
+        data-title={tool.name.toLowerCase()}
+        data-keywords={(tool.keywords ?? []).join(' ').toLowerCase()}
+        data-description={tool.description.toLowerCase()}
+      >
+        <span class="search-icon">{tool.icon}</span>
+        <span class="search-text">
+          <strong>{tool.name}</strong>
+          <small>{tool.description}</small>
+        </span>
+      </a>
+    ))}
+  </div>
 </div>
 
 <script>
-  import '../scripts/search.ts';
+  const input   = document.getElementById('search-input') as HTMLInputElement;
+  const results = document.getElementById('search-results');
+
+  if (input && results) {
+    const items = Array.from(results.querySelectorAll<HTMLElement>('.search-item'));
+
+    input.addEventListener('input', () => {
+      const q = input.value.toLowerCase().trim();
+
+      if (q.length === 0) {
+        results.classList.add('hidden');
+        return;
+      }
+
+      let anyVisible = false;
+      items.forEach(item => {
+        const matches =
+          (item.dataset.title ?? '').includes(q) ||
+          (item.dataset.description ?? '').includes(q) ||
+          (item.dataset.keywords ?? '').includes(q);
+        item.style.display = matches ? 'flex' : 'none';
+        if (matches) anyVisible = true;
+      });
+
+      results.classList.toggle('hidden', !anyVisible);
+    });
+
+    // Cerrar al hacer clic fuera
+    document.addEventListener('click', (e) => {
+      if (!input.contains(e.target as Node) && !results.contains(e.target as Node)) {
+        results.classList.add('hidden');
+        input.value = '';
+      }
+    });
+
+    // Cerrar con Escape
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        results.classList.add('hidden');
+        input.value = '';
+        input.blur();
+      }
+    });
+  }
 </script>
 
 <style>
-  .search-container { position: relative; max-width: 600px; margin: 0 auto; }
-  #search-input { width: 100%; padding: 0.75rem 1rem; border-radius: 9999px; border: 1px solid #d1d5db; font-size: 1rem; }
-  .search-results { position: absolute; top: 100%; left: 0; right: 0; background: white; border-radius: 1rem; box-shadow: 0 10px 25px rgba(0,0,0,0.1); z-index: 50; max-height: 400px; overflow-y: auto; }
-  .search-results a { display: block; padding: 0.75rem 1rem; border-bottom: 1px solid #e5e7eb; text-decoration: none; color: #111827; }
-  .search-results a:hover { background: #f3f4f6; }
-  .hidden { display: none; }
+  .search-container {
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  #search-input {
+    width: 100%;
+    padding: 0.8rem 1.25rem;
+    border-radius: 9999px;
+    border: 2px solid #e5e7eb;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+  }
+
+  #search-input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  }
+
+  .search-results {
+    position: absolute;
+    top: calc(100% + 0.4rem);
+    left: 0;
+    right: 0;
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    z-index: 100;
+    max-height: 380px;
+    overflow-y: auto;
+    border: 1px solid #e5e7eb;
+  }
+
+  .search-results.hidden { display: none; }
+
+  .search-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #f3f4f6;
+    text-decoration: none;
+    color: #111827;
+    transition: background 0.15s;
+  }
+
+  .search-item:last-child { border-bottom: none; }
+  .search-item:hover { background: #f0f9ff; }
+
+  .search-icon { font-size: 1.5rem; flex-shrink: 0; }
+
+  .search-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .search-text strong { font-size: 0.95rem; color: #111827; }
+  .search-text small  { font-size: 0.8rem; color: #6b7280; }
 </style>
