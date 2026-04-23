@@ -14,6 +14,12 @@ const staticPages = [
   '/cookies/'
 ];
 
+function normalizePath(path: string) {
+  if (!path.startsWith('/')) path = `/${path}`;
+  if (!path.endsWith('/')) path = `${path}/`;
+  return path;
+}
+
 function joinUrl(base: string, path: string) {
   return `${base.replace(/\/$/, '')}${path}`;
 }
@@ -23,9 +29,9 @@ export const GET: APIRoute = async ({ site }) => {
   const tools = getAllTools();
 
   const urls = [
-    ...staticPages.map((page) => joinUrl(base, page)),
-    ...tools.map((tool) => joinUrl(base, tool.url.startsWith('/') ? tool.url : `/${tool.url}`)),
-    ...categories.map((cat) => joinUrl(base, cat.slug.endsWith('/') ? cat.slug : `${cat.slug}/`)),
+    ...staticPages.map((page) => joinUrl(base, normalizePath(page))),
+    ...tools.map((tool) => joinUrl(base, normalizePath(tool.url))),
+    ...categories.map((cat) => joinUrl(base, normalizePath(cat.slug))),
   ];
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
