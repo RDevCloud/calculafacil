@@ -1,3 +1,4 @@
 User-agent: *
 Allow: /
-Sitemap: https://calculafacil.netlify.app/sitemap.xml
+
+Sitemap: https://calculafacilito.netlify.app/sitemap.xml

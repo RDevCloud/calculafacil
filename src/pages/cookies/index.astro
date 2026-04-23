@@ -1,0 +1,117 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Política de cookies" description="Política de cookies de CalculaFácil. Aprende qué cookies usamos, para qué y cómo puedes gestionarlas.">
+  <div class="static-page">
+    <h1>Política de cookies</h1>
+    <p class="updated">Última actualización: abril 2026</p>
+
+    <h2>¿Qué son las cookies?</h2>
+    <p>Las cookies son pequeños archivos de texto que los sitios web guardan en tu navegador para recordar preferencias o para mostrar publicidad relevante.</p>
+
+    <h2>Cookies que usamos</h2>
+
+    <div class="cookie-table-wrapper">
+      <table class="cookie-table">
+        <thead>
+          <tr><th>Cookie</th><th>Tipo</th><th>Finalidad</th><th>Duración</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>cf_currency</code></td>
+            <td>Propia</td>
+            <td>Recordar tu moneda seleccionada</td>
+            <td>Permanente (localStorage)</td>
+          </tr>
+          <tr>
+            <td><code>cf_lang</code></td>
+            <td>Propia</td>
+            <td>Recordar tu idioma preferido</td>
+            <td>Permanente (localStorage)</td>
+          </tr>
+          <tr>
+            <td><code>cf_consent</code></td>
+            <td>Propia</td>
+            <td>Guardar tu decisión sobre cookies</td>
+            <td>Permanente (localStorage)</td>
+          </tr>
+          <tr>
+            <td><code>__gads / IDE</code></td>
+            <td>Google AdSense</td>
+            <td>Mostrar anuncios relevantes (solo si aceptas)</td>
+            <td>Hasta 13 meses</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Cookies de Google AdSense</h2>
+    <p>Utilizamos Google AdSense para mostrar anuncios. Google puede usar cookies para personalizar los anuncios según tu historial de navegación. Puedes consultar la <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">política de publicidad de Google</a> y gestionar tus preferencias en <a href="https://adssettings.google.com" target="_blank" rel="noopener">adssettings.google.com</a>.</p>
+
+    <h2>Cómo gestionar tus cookies</h2>
+    <p>Puedes cambiar tu preferencia en cualquier momento haciendo clic en el botón de abajo. También puedes eliminar las cookies desde la configuración de tu navegador.</p>
+
+    <div class="consent-actions">
+      <button id="accept-all" class="btn-accept">✅ Aceptar todas las cookies</button>
+      <button id="decline-all" class="btn-decline">❌ Rechazar cookies opcionales</button>
+    </div>
+    <p id="consent-status" class="consent-status"></p>
+
+    <h2>Más información</h2>
+    <p>Si tienes dudas, contacta con nosotros a través de la <a href="/contacto/">página de contacto</a>.</p>
+  </div>
+</BaseLayout>
+
+<script>
+  const status = document.getElementById('consent-status');
+  const current = localStorage.getItem('cf_consent');
+  if (status) {
+    status.textContent = current === 'granted'
+      ? '✅ Estado actual: Has aceptado todas las cookies.'
+      : current === 'denied'
+        ? '❌ Estado actual: Has rechazado las cookies opcionales.'
+        : 'ℹ️ Estado actual: Aún no has tomado una decisión.';
+  }
+
+  document.getElementById('accept-all')?.addEventListener('click', () => {
+    localStorage.setItem('cf_consent', 'granted');
+    if (typeof (window as any).gtag === 'function') {
+      (window as any).gtag('consent', 'update', {
+        ad_storage: 'granted', ad_user_data: 'granted',
+        ad_personalization: 'granted', analytics_storage: 'granted',
+      });
+    }
+    if (status) status.textContent = '✅ Estado actual: Has aceptado todas las cookies.';
+  });
+
+  document.getElementById('decline-all')?.addEventListener('click', () => {
+    localStorage.setItem('cf_consent', 'denied');
+    if (typeof (window as any).gtag === 'function') {
+      (window as any).gtag('consent', 'update', {
+        ad_storage: 'denied', ad_user_data: 'denied',
+        ad_personalization: 'denied', analytics_storage: 'denied',
+      });
+    }
+    if (status) status.textContent = '❌ Estado actual: Has rechazado las cookies opcionales.';
+  });
+</script>
+
+<style>
+  .static-page { max-width: 800px; margin: 0 auto; padding: 2rem 0; }
+  .static-page h1 { font-size: 2rem; margin-bottom: 0.5rem; color: #111827; }
+  .updated { font-size: 0.875rem; color: #6b7280; margin-bottom: 2rem; }
+  .static-page h2 { font-size: 1.2rem; margin: 2rem 0 0.75rem; color: #1e3a8a; }
+  .static-page p { color: #374151; line-height: 1.8; margin-bottom: 0.75rem; }
+  .cookie-table-wrapper { overflow-x: auto; margin: 1rem 0; }
+  .cookie-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  .cookie-table th { background: #1e3a8a; color: white; padding: 0.6rem 0.9rem; text-align: left; }
+  .cookie-table td { padding: 0.6rem 0.9rem; border-bottom: 1px solid #e5e7eb; color: #374151; }
+  .cookie-table tr:nth-child(even) td { background: #f9fafb; }
+  code { background: #f3f4f6; padding: 0.1rem 0.35rem; border-radius: 0.25rem; font-size: 0.85rem; }
+  .consent-actions { display: flex; gap: 1rem; flex-wrap: wrap; margin: 1.5rem 0 0.75rem; }
+  .btn-accept, .btn-decline { padding: 0.65rem 1.25rem; border: none; border-radius: 0.5rem; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
+  .btn-accept { background: #2563eb; color: white; }
+  .btn-decline { background: #374151; color: #f9fafb; }
+  .btn-accept:hover, .btn-decline:hover { opacity: 0.85; }
+  .consent-status { font-size: 0.9rem; color: #4b5563; font-style: italic; }
+</style>

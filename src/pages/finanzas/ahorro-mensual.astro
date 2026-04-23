@@ -44,6 +44,13 @@ const faqs = [
 </ToolLayout>
 
 <script>
+  function fmt(n: number): string {
+    const c = localStorage.getItem('cf_currency') || 'EUR';
+    const syms: Record<string, string> = { EUR:'€', USD:'$', MXN:'$', COP:'$', GBP:'£', ARS:'$', BRL:'R$' };
+    const s = syms[c] ?? '€';
+    const r = Math.round(n * 100) / 100;
+    return c === 'EUR' ? `${r.toFixed(2)} €` : `${s}${r.toFixed(2)} ${c}`;
+  }
   const form = document.getElementById('tool-form') as HTMLFormElement;
   if (form) {
     form.addEventListener('submit', (e) => {
@@ -57,7 +64,7 @@ const faqs = [
         if (mensual <= 0) {
           resultDiv.innerHTML = `<strong>¡Ya alcanzaste tu meta! 🎉</strong>`;
         } else {
-          resultDiv.innerHTML = `<strong>Debes ahorrar: ${mensual.toFixed(2)} € / mes</strong>`;
+          resultDiv.innerHTML = `<strong>Debes ahorrar: ${fmt(mensual)} / mes</strong>`;
         }
       }
     });

@@ -51,6 +51,13 @@ const faqs = [
 </ToolLayout>
 
 <script>
+  function fmt(n: number): string {
+    const c = localStorage.getItem('cf_currency') || 'EUR';
+    const syms: Record<string, string> = { EUR:'€', USD:'$', MXN:'$', COP:'$', GBP:'£', ARS:'$', BRL:'R$' };
+    const s = syms[c] ?? '€';
+    const r = Math.round(n * 100) / 100;
+    return c === 'EUR' ? `${r.toFixed(2)} €` : `${s}${r.toFixed(2)} ${c}`;
+  }
   const form = document.getElementById('tool-form') as HTMLFormElement;
   if (form) {
     form.addEventListener('submit', (e) => {
@@ -62,7 +69,7 @@ const faqs = [
       const A = P * Math.pow(1 + r / n, n * t);
       const ganancia = A - P;
       const resultDiv = document.getElementById('result');
-      if (resultDiv) resultDiv.innerHTML = `<strong>Monto final: ${A.toFixed(2)} &nbsp;|&nbsp; Ganancia: ${ganancia.toFixed(2)}</strong>`;
+      if (resultDiv) resultDiv.innerHTML = `<strong>Monto final: ${fmt(A)} &nbsp;|&nbsp; Ganancia: ${fmt(ganancia)}</strong>`;
     });
   }
 </script>

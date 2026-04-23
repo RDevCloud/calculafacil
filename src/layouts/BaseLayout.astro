@@ -1,6 +1,7 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import CookieConsent from '../components/CookieConsent.astro';
 import '../styles/global.css';
 
 export interface Props {
@@ -29,8 +30,22 @@ const fullTitle = title === siteTitle ? title : `${title} | ${siteTitle}`;
     <meta property="og:type" content="website" />
     <meta property="og:image" content={ogImage || '/og/default.jpg'} />
     <meta name="twitter:card" content="summary_large_image" />
-    <!-- Carga global de AdSense (placeholder) -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-xxxxxxxxxx" crossorigin="anonymous" defer></script>
+    <!-- Google Consent Mode v2: default denied until user accepts -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(...args: any[]) { window.dataLayer.push(args); }
+      const _consent = localStorage.getItem('cf_consent');
+      const _val = _consent === 'granted' ? 'granted' : 'denied';
+      (window as any).gtag = gtag;
+      gtag('consent', 'default', {
+        ad_storage: _val,
+        ad_user_data: _val,
+        ad_personalization: _val,
+        analytics_storage: _val,
+      });
+    </script>
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6695699939765081" crossorigin="anonymous"></script>
     <slot name="head" />
   </head>
   <body>
@@ -41,6 +56,7 @@ const fullTitle = title === siteTitle ? title : `${title} | ${siteTitle}`;
       </div>
     </main>
     <Footer />
+    <CookieConsent />
   </body>
 </html>
 

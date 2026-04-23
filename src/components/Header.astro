@@ -1,34 +1,120 @@
 ---
-// Navegación principal
 const currentPath = Astro.url.pathname;
-const isHome = currentPath === '/';
 ---
 
 <header class="site-header">
-  <div class="container">
+  <div class="header-inner">
     <div class="logo">
       <a href="/" aria-label="CalculaFácil - Inicio">
         <span class="logo-icon">🧮</span>
         <span class="logo-text">CalculaFácil</span>
       </a>
     </div>
-    <nav class="main-nav">
+    <nav class="main-nav" aria-label="Navegación principal">
       <ul>
-        <li><a href="/finanzas/" class={currentPath.startsWith('/finanzas') ? 'active' : ''}>Finanzas</a></li>
+        <li><a href="/finanzas/"   class={currentPath.startsWith('/finanzas')   ? 'active' : ''}>Finanzas</a></li>
         <li><a href="/fecha-hora/" class={currentPath.startsWith('/fecha-hora') ? 'active' : ''}>Fecha y hora</a></li>
         <li><a href="/utilidades/" class={currentPath.startsWith('/utilidades') ? 'active' : ''}>Utilidades</a></li>
       </ul>
     </nav>
+    <div class="header-controls">
+      <select id="currency-select" title="Moneda" aria-label="Seleccionar moneda">
+        <option value="EUR">€ EUR</option>
+        <option value="USD">$ USD</option>
+        <option value="MXN">$ MXN</option>
+        <option value="COP">$ COP</option>
+        <option value="GBP">£ GBP</option>
+        <option value="ARS">$ ARS</option>
+        <option value="BRL">R$ BRL</option>
+      </select>
+      <button id="lang-toggle" title="Idioma / Language" aria-label="Cambiar idioma">🌐 ES</button>
+    </div>
   </div>
 </header>
 
+<script>
+  // --- Currency ---
+  const currencySelect = document.getElementById('currency-select') as HTMLSelectElement;
+  const savedCurrency = localStorage.getItem('cf_currency') || 'EUR';
+  currencySelect.value = savedCurrency;
+  currencySelect.addEventListener('change', () => {
+    localStorage.setItem('cf_currency', currencySelect.value);
+    window.dispatchEvent(new CustomEvent('cf:currency-change', { detail: currencySelect.value }));
+  });
+
+  // --- Language ---
+  const langBtn = document.getElementById('lang-toggle') as HTMLButtonElement;
+  const defaultLang = navigator.language?.startsWith('en') ? 'en' : 'es';
+  const savedLang = localStorage.getItem('cf_lang') || defaultLang;
+
+  function applyLang(lang: string) {
+    document.documentElement.lang = lang;
+    langBtn.textContent = `🌐 ${lang.toUpperCase()}`;
+    localStorage.setItem('cf_lang', lang);
+  }
+
+  applyLang(savedLang);
+
+  langBtn.addEventListener('click', () => {
+    const current = localStorage.getItem('cf_lang') || 'es';
+    applyLang(current === 'es' ? 'en' : 'es');
+  });
+</script>
+
 <style>
-  .site-header { background: #1e3a8a; color: white; padding: 1rem 0; position: sticky; top: 0; z-index: 100; }
-  .container { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
-  .logo a { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: white; font-weight: bold; font-size: 1.5rem; }
-  .logo-icon { font-size: 1.8rem; }
+  .site-header {
+    background: #1e3a8a;
+    color: white;
+    padding: 0.75rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  .header-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .logo a { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: white; font-weight: bold; font-size: 1.4rem; }
+  .logo-icon { font-size: 1.7rem; }
   .main-nav ul { display: flex; gap: 1.5rem; list-style: none; margin: 0; padding: 0; }
-  .main-nav a { color: white; text-decoration: none; font-weight: 500; padding: 0.25rem 0; border-bottom: 2px solid transparent; }
-  .main-nav a:hover, .main-nav a.active { border-bottom-color: #fbbf24; }
-  @media (max-width: 640px) { .main-nav ul { gap: 1rem; } .logo-text { display: none; } .logo-icon { font-size: 2rem; } }
+  .main-nav a { color: rgba(255,255,255,0.85); text-decoration: none; font-weight: 500; padding: 0.25rem 0; border-bottom: 2px solid transparent; transition: color 0.2s, border-color 0.2s; }
+  .main-nav a:hover, .main-nav a.active { color: white; border-bottom-color: #fbbf24; }
+  .header-controls { display: flex; align-items: center; gap: 0.5rem; }
+  #currency-select {
+    background: rgba(255,255,255,0.12);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 0.4rem;
+    padding: 0.3rem 0.5rem;
+    font-size: 0.82rem;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  #currency-select option { background: #1e3a8a; color: white; }
+  #lang-toggle {
+    background: rgba(255,255,255,0.12);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 0.4rem;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    white-space: nowrap;
+  }
+  #lang-toggle:hover { background: rgba(255,255,255,0.22); }
+  @media (max-width: 640px) {
+    .main-nav ul { gap: 0.85rem; }
+    .logo-text { display: none; }
+    .logo-icon { font-size: 2rem; }
+    #currency-select, #lang-toggle { font-size: 0.75rem; padding: 0.25rem 0.4rem; }
+  }
 </style>
