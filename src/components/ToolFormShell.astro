@@ -2,29 +2,12 @@
 const { toolName } = Astro.props;
 ---
 <div class="tool-form-container" data-tool={toolName}>
-  <form id="tool-form" class="tool-form">
+  <form id="tool-form" class="tool-form" novalidate>
     <slot name="inputs" />
     <button type="button" id="calc-btn" data-es="Calcular" data-en="Calculate">Calcular</button>
   </form>
   <div id="result" class="result-area"></div>
 </div>
-
-<script>
-  // Central handler: validates the form then fires 'submit' for each calculator's listener
-  const btn  = document.getElementById('calc-btn') as HTMLButtonElement | null;
-  const form = document.getElementById('tool-form') as HTMLFormElement | null;
-
-  if (btn && form) {
-    btn.addEventListener('click', () => {
-      if (!form.checkValidity()) {
-        form.reportValidity(); // shows browser native validation tooltips
-        return;
-      }
-      // Dispatch synthetic submit so each page's listener handles calculation
-      form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
-    });
-  }
-</script>
 
 <style>
   .tool-form { background: #f9fafb; padding: 1.5rem; border-radius: 1rem; margin: 1.5rem 0; }
