@@ -5,26 +5,28 @@ export interface Props {
 }
 const { format = 'horizontal', className = '' } = Astro.props;
 
-const adClass = {
-  horizontal: 'ad-horizontal',
-  vertical:   'ad-vertical',
-  banner:     'ad-banner',
-}[format];
+// Real AdSense slot IDs
+const slotIds: Record<string, string> = {
+  vertical:   '7441944732',  // Sidebar CalculaFacil
+  horizontal: '9189621158',  // Banner CalculaFacil
+  banner:     '9189621158',  // Banner CalculaFacil
+};
+const adClass = { horizontal: 'ad-horizontal', vertical: 'ad-vertical', banner: 'ad-banner' }[format];
+const slotId = slotIds[format];
 ---
 
-<div class={`ad-slot ${adClass} ${className}`} data-format={format}>
+<div class={`ad-slot ${adClass} ${className}`}>
   <ins
     class="adsbygoogle"
     style="display:block"
     data-ad-client="ca-pub-6695699939765081"
-    data-ad-slot="auto"
+    data-ad-slot={slotId}
     data-ad-format="auto"
     data-full-width-responsive="true"
   ></ins>
 </div>
 
 <script>
-  // Push each ad unit when component mounts
   (window.adsbygoogle = window.adsbygoogle || []).push({});
 </script>
 
