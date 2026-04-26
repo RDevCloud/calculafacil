@@ -44,18 +44,20 @@ const enHref = `${BASE}${enPath}`;
     <link rel="alternate" hreflang="es" href={esHref} />
     <link rel="alternate" hreflang="en" href={enHref} />
     <link rel="alternate" hreflang="x-default" href={esHref} />
-    <!-- Google Consent Mode v2: default denied until user accepts -->
-    <script>
+    <!-- Google Consent Mode v2 -->
+    <script is:inline>
       window.dataLayer = window.dataLayer || [];
-      function gtag(...args: any[]) { window.dataLayer.push(args); }
-      const _consent = localStorage.getItem('cf_consent');
-      const _val = _consent === 'granted' ? 'granted' : 'denied';
-      (window as any).gtag = gtag;
+      function gtag() { window.dataLayer.push(arguments); }
+      window.gtag = gtag;
+      // Only 'denied' if user explicitly declined — show ads to everyone else
+      var _consent = localStorage.getItem('cf_consent');
+      var _val = _consent === 'denied' ? 'denied' : 'granted';
       gtag('consent', 'default', {
-        ad_storage: _val,
-        ad_user_data: _val,
+        ad_storage:         _val,
+        ad_user_data:       _val,
         ad_personalization: _val,
-        analytics_storage: _val,
+        analytics_storage:  _val,
+        wait_for_update:    500,
       });
     </script>
     <!-- Google AdSense -->
